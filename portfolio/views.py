@@ -8,22 +8,67 @@ def index(request):
                 'name': 'Project 1',
                 'githubLink': 'https://github.com/donnell74/myPortfolio',
                 'timelineData': '##data about timeline here##',
-                'icStatsData': '##data about ic stats here##',        
-                'reviewerStatsData': '##data about reviewer stats here##'
+                'icStatsData': {
+                    'summary': '##data about ic stats here##',
+                    'codeStats': '##Stats about code changes##',
+                    'docStats': '##Stats about doc changes##',
+                    'testStats': '##Stats about test changes##',
+                },   
+                'reviewerStatsData': {
+                    'summary': '##data about reviewer stats here##',
+                    'codeStats': '##Stats about code changes##',
+                    'docStats': '##Stats about doc changes##',
+                    'testStats': '##Stats about test changes##',
+                },
+                'bugStatsData': {
+                    'summary': '##data about bug stats here##',
+                    'bugsClosed': '120',
+                    'bugsOpen': '32',
+                }
             },
             {
                 'name': 'Project 2',
                 'githubLink': 'https://github.com/donnell74/myPortfolio',
                 'timelineData': '##data about timeline here##',
-                'icStatsData': '##data about ic stats here##',        
-                'reviewerStatsData': '##data about reviewer stats here##'
+                'icStatsData': {
+                    'summary': '##data about ic stats here##',
+                    'codeStats': '##Stats about code changes##',
+                    'docStats': '##Stats about doc changes##',
+                    'testStats': '##Stats about test changes##',
+                },
+                'reviewerStatsData': {
+                    'summary': '##data about reviewer stats here##',
+                    'codeStats': '##Stats about code changes##',
+                    'docStats': '##Stats about doc changes##',
+                    'testStats': '##Stats about test changes##',
+                },
+                'bugStatsData': {
+                    'summary': '##data about bug stats here##',
+                    'bugsClosed': '120',
+                    'bugsOpen': '32',
+                }
             },
             {
                 'name': 'Project 3',
                 'githubLink': 'https://github.com/donnell74/myPortfolio',
                 'timelineData': '##data about timeline here##',
-                'icStatsData': '##data about ic stats here##',        
-                'reviewerStatsData': '##data about reviewer stats here##'
+                'icStatsData': {
+                    'summary': '##data about ic stats here##',
+                    'codeStats': '##Stats about code changes##',
+                    'docStats': '##Stats about doc changes##',
+                    'testStats': '##Stats about test changes##',
+                },
+                'reviewerStatsData': {
+                    'summary': '##data about reviewer stats here##',
+                    'codeStats': '##Stats about code changes##',
+                    'docStats': '##Stats about doc changes##',
+                    'testStats': '##Stats about test changes##',
+                },
+                'bugStatsData': {
+                    'summary': '##data about bug stats here##',
+                    'bugsClosed': '120',
+                    'bugsOpen': '32',
+                }
             },
         ]
     }

@@ -11,18 +11,34 @@
     <title>MyPortfolio</title>
   </head>
   <body>
-    <header class="container-fluid text-center">
-        <h1>MyPortfolio</h1>
-    </header>
+    <nav class="navbar navbar-expand-lg navbar-light bg-light">
+      <a class="navbar-brand" href="/portfolio">MyPortfolio</a>
+      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarSupportedContent" aria-controls="navbarSupportedContent" aria-expanded="false" aria-label="Toggle navigation">
+        <span class="navbar-toggler-icon"></span>
+      </button>
+
+      <div class="collapse navbar-collapse" id="navbarSupportedContent">
+        <ul class="navbar-nav mr-auto">
+          <li class="nav-item">
+            <a class="nav-link" href="/accounts/profile">My Profile</a>
+          </li>
+          <li class="nav-item">
+            {% if user.is_authenicated %}
+                <a class="nav-link" href="/accounts/logout">Logout</a>
+            {% else %}
+                <a class="nav-link" href="/accounts/login">Login</a>
+            {% endif %}
+          </li>
+        </ul>
+      </div>
+    </nav>
 
     <div class="container-fluid text-center">
         {% block content %}
         {% endblock %}
         <br>
 
-        {% if user.is_staff %}
-            <a href="/admin">Admin login</a>
-        {% endif %}
+        <a href="/admin">Admin login</a>
     </div>
 
     <!-- Optional JavaScript -->

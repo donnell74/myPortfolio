@@ -5,6 +5,10 @@ import json
 
 
 # Create your views here.
+def profile(request):
+    context = {}
+    return render(request, 'portfolio/profile.html', context)
+
 def index(request):
     return redirect("https://github.com/login/oauth/authorize?client_id=%s" % (CLIENT_ID))
 

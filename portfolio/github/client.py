@@ -3,7 +3,6 @@ import requests
 import json
 
 
-
 CLIENT_ID = "1bdd6d92103f8958fb5b"
 CLIENT_SECRET = "314d8ecd1736abfe01aca20ceafa8a3b8ce5bdfd"
 ACCESS_TOKEN_URL = "https://github.com/login/oauth/access_token"
@@ -12,7 +11,6 @@ GITHUB_GRAPHQL_ENDPOINT = "https://api.github.com/graphql"
 
 class GithubV4Client(object):
     """A simple client for github's v4 api."""
-
     def __init__(self, code):
         self.accessToken = self.getOAuthToken(code)
 

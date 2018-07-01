@@ -19,4 +19,5 @@ from . import views
 urlpatterns = [
     path('', views.index, name='index'),
     path('portfolio/', views.homepage, name="homepage"),
+    path('accounts/profile/', views.profile, name="profile"),
 ]

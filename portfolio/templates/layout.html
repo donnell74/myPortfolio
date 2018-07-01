@@ -20,7 +20,9 @@
         {% endblock %}
         <br>
 
-        <a href="/admin">Admin login</a>
+        {% if user.is_staff %}
+            <a href="/admin">Admin login</a>
+        {% endif %}
     </div>
 
     <!-- Optional JavaScript -->

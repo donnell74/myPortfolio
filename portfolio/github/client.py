@@ -1,4 +1,6 @@
 from .queries import *
+from portfolio.models import GithubToken
+from django.db import IntegrityError
 import requests
 import json
 
@@ -11,10 +13,17 @@ GITHUB_GRAPHQL_ENDPOINT = "https://api.github.com/graphql"
 
 class GithubV4Client(object):
     """A simple client for github's v4 api."""
-    def __init__(self, code):
-        self.accessToken = self.getOAuthToken(code)
+    def __init__(self, user):
+        self.user = user
+        self.githubToken = None
+        if self.atLeastOneTokenFound():
+            # TODO(donnell74): handle multiple tokens
+            self.githubToken = GithubToken.objects.filter(user_id = user.id)[0]
 
-    def getOAuthToken(self, clientCode):
+    def atLeastOneTokenFound(self):
+        return GithubToken.objects.filter(user_id = self.user.id).count() > 0
+
+    def getAndSaveOAuthToken(self, clientCode):
         """Gets an OAuth token based on the code returned by authorize."""
         accessTokenRequest = requests.post(
                 ACCESS_TOKEN_URL, 
@@ -29,7 +38,35 @@ class GithubV4Client(object):
             )
 
         accessTokenRequest.raise_for_status()
-        return accessTokenRequest.json().get('access_token')
+        accessToken = accessTokenRequest.json().get('access_token')
+        self.githubToken = GithubToken(
+            user_id = self.user.id,
+            token = accessToken,
+        )
+
+        self.githubToken.githubLogin = self.getGithubLogin()
+        maybePreviousGithubToken = GithubToken.objects.filter(
+            user_id = self.user.id,
+            github_username = self.githubToken.githubLogin,
+        )
+
+        if maybePreviousGithubToken.count() == 1:
+            self.githubToken = maybePreviousGithubToken[0]
+            self.githubToken.token = accessToken
+        elif maybePreviousGithubToken.count() > 1:
+            raise IntegrityError(
+                "There is more than one github token for the user id %d and username %s",
+                self.user.id,
+                githubLogin,
+            )
+
+        self.githubToken.save()
+
+    def getGithubLogin(self):
+        githubLoginRequest = self.query(VIEWERS_NAME)
+        githubLoginRequest.raise_for_status()
+        return githubLoginRequest.json().get("data").get("viewer").get("login")
+
 
     def getLast25Projects(self):
         """Gets the last 25 projects for the current user."""
@@ -46,6 +83,6 @@ class GithubV4Client(object):
                     'query': queryString
                 },
                 headers = {
-                    'Authorization': "bearer %s" % (self.accessToken)
+                    'Authorization': "bearer %s" % (self.githubToken.token)
                 }
             )

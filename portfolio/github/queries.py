@@ -10,3 +10,11 @@ query {
   }
 }
 """
+
+VIEWERS_NAME = """
+query {
+    viewer {
+        login
+    }
+}
+"""

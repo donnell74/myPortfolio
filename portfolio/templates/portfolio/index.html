@@ -1,0 +1,41 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    {% if projects|length == 0 %}
+        <div class="bg-light">
+            <p>Unable to find projects, check that you have added at least one integration in the 
+                <a href="/accounts/profile/">profile page</a>.</p>
+        </div>
+    {% endif %}
+
+    {% for eachProject in projects %}
+        <div class="bg-light">
+            <h3>{{eachProject.name}}</h3>
+            <p><a href="{{eachProject.githubLink}}">Github link</a></p>
+            <div class="timeline">
+                <p>Timeline</p>
+                <p>{{eachProject.timelineData}}</p>
+            </div>
+            <div class="ICStats">
+                <p>Individual Contributor Stats</p>
+                <p>Summary: {{eachProject.icStatsData.summary}}</p>
+                <p>Code Stats: {{eachProject.icStatsData.codeStats}}</p>
+                <p>Doc Stats: {{eachProject.icStatsData.docStats}}</p>
+                <p>Test Stats: {{eachProject.icStatsData.testStats}}</p>
+            </div>
+            <div class="ReviewerStats">
+                <p>Reviewer Stats</p>
+                <p>Summary: {{eachProject.reviewerStatsData.summary}}</p>
+                <p>Code Stats: {{eachProject.reviewerStatsData.codeStats}}</p>
+                <p>Doc Stats: {{eachProject.reviewerStatsData.docStats}}</p>
+                <p>Test Stats: {{eachProject.reviewerStatsData.testStats}}</p>
+            </div>
+            <div class="BugStats">
+                <p>Bug Stats</p>
+                <p>Summary: {{eachProject.bugStatsData.summary}}</p>
+                <p>Bugs Closed: {{eachProject.bugStatsData.bugsClosed}}</p>
+                <p>Bugs Open: {{eachProject.bugStatsData.bugsOpen}}</p>
+            </div>            
+        </div>
+    {% endfor %}
+{% endblock %}

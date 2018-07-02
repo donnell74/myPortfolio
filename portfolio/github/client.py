@@ -13,41 +13,42 @@ GITHUB_GRAPHQL_ENDPOINT = "https://api.github.com/graphql"
 
 class GithubV4Client(object):
     """A simple client for github's v4 api."""
+
     def __init__(self, user):
         self.user = user
         self.githubToken = None
         if self.atLeastOneTokenFound():
             # TODO(donnell74): handle multiple tokens
-            self.githubToken = GithubToken.objects.filter(user_id = user.id)[0]
+            self.githubToken = GithubToken.objects.filter(user_id=user.id)[0]
 
     def atLeastOneTokenFound(self):
-        return GithubToken.objects.filter(user_id = self.user.id).count() > 0
+        return GithubToken.objects.filter(user_id=self.user.id).count() > 0
 
     def getAndSaveOAuthToken(self, clientCode):
         """Gets an OAuth token based on the code returned by authorize."""
         accessTokenRequest = requests.post(
-                ACCESS_TOKEN_URL, 
-                data = {
-                    'client_id': CLIENT_ID,
-                    'client_secret': CLIENT_SECRET,
-                    'code': clientCode
-                },
-                headers = {
-                    'accept': 'application/json'
-                }
-            )
+            ACCESS_TOKEN_URL,
+            data={
+                'client_id': CLIENT_ID,
+                'client_secret': CLIENT_SECRET,
+                'code': clientCode
+            },
+            headers={
+                'accept': 'application/json'
+            }
+        )
 
         accessTokenRequest.raise_for_status()
         accessToken = accessTokenRequest.json().get('access_token')
         self.githubToken = GithubToken(
-            user_id = self.user.id,
-            token = accessToken,
+            user_id=self.user.id,
+            token=accessToken,
         )
 
         self.githubToken.githubLogin = self.getGithubLogin()
         maybePreviousGithubToken = GithubToken.objects.filter(
-            user_id = self.user.id,
-            github_username = self.githubToken.githubLogin,
+            user_id=self.user.id,
+            github_username=self.githubToken.githubLogin,
         )
 
         if maybePreviousGithubToken.count() == 1:
@@ -67,7 +68,6 @@ class GithubV4Client(object):
         githubLoginRequest.raise_for_status()
         return githubLoginRequest.json().get("data").get("viewer").get("login")
 
-
     def getLast25Projects(self):
         """Gets the last 25 projects for the current user."""
         getProjectsRequests = self.query(LAST_25_PROJECTS_QUERY)
@@ -77,12 +77,14 @@ class GithubV4Client(object):
 
     def query(self, queryString):
         """Queries Github with queryString and correct auth."""
+        # TODO(gdonnell): If this throws an unauthorized error delete the token
+        # from the database.
         return requests.post(
-                GITHUB_GRAPHQL_ENDPOINT, 
-                json = {
-                    'query': queryString
-                },
-                headers = {
-                    'Authorization': "bearer %s" % (self.githubToken.token)
-                }
-            )
+            GITHUB_GRAPHQL_ENDPOINT,
+            json={
+                'query': queryString
+            },
+            headers={
+                'Authorization': "bearer %s" % (self.githubToken.token)
+            }
+        )

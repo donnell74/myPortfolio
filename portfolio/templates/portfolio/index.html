@@ -1,6 +1,13 @@
-{% extends 'portfolio/layout.html' %}
+{% extends 'layout.html' %}
 
 {% block content %}
+    {% if projects|length == 0 %}
+        <div class="bg-light">
+            <p>Unable to find projects, check that you have added at least one integration in the 
+                <a href="/accounts/profile/">profile page</a>.</p>
+        </div>
+    {% endif %}
+
     {% for eachProject in projects %}
         <div class="bg-light">
             <h3>{{eachProject.name}}</h3>

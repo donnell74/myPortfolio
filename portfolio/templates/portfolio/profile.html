@@ -1,0 +1,22 @@
+{% extends 'layout.html' %}
+
+{% block content %}
+    <div id="personalInfo">
+        <h2>Personal Info</h2>
+        <p>Profile of {{user.username}}</p>
+        <p>Email (if we have it): {{user.email}}</p>
+    </div>
+    <hr/>
+
+    <div id="Github">
+        <h2>Github Users Authorized</h2>
+        <ul>
+            {% for eachGithubToken in githubTokens %}
+                <li>{{eachGithubToken.github_username}}</li>
+            {% endfor %}
+        </ul>
+        <a href="/accounts/profile/getGithubTokenCode">Add Github User</a><br />
+        <a href="https://github.com/settings/connections/applications/1bdd6d92103f8958fb5b">Review Github Access</a>
+    </div>
+
+{% endblock %}

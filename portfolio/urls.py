@@ -18,4 +18,7 @@ from . import views
 
 urlpatterns = [
     path('', views.index, name='index'),
+    path('accounts/profile/', views.profile, name="profile"),
+    path('accounts/profile/getGithubTokenCode', views.getGithubTokenCode, name="getGithubTokenCode"),
+    path('accounts/profile/saveGithubToken', views.saveGithubToken, name="saveGithubToken"),
 ]

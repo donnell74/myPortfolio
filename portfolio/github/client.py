@@ -45,10 +45,10 @@ class GithubV4Client(object):
             token=accessToken,
         )
 
-        self.githubToken.githubLogin = self.getGithubLogin()
+        self.githubToken.github_username = self.getGithubLogin()
         maybePreviousGithubToken = GithubToken.objects.filter(
             user_id=self.user.id,
-            github_username=self.githubToken.githubLogin,
+            github_username=self.githubToken.github_username,
         )
 
         if maybePreviousGithubToken.count() == 1:
@@ -58,7 +58,7 @@ class GithubV4Client(object):
             raise IntegrityError(
                 "There is more than one github token for the user id %d and username %s",
                 self.user.id,
-                githubLogin,
+                github_username,
             )
 
         self.githubToken.save()
@@ -66,19 +66,34 @@ class GithubV4Client(object):
     def getGithubLogin(self):
         githubLoginRequest = self.query(VIEWERS_NAME)
         githubLoginRequest.raise_for_status()
+        print("Get github login response: %s" %
+              githubLoginRequest.json())
         return githubLoginRequest.json().get("data").get("viewer").get("login")
 
     def getLast25Projects(self):
         """Gets the last 25 projects for the current user."""
-        getProjectsRequests = self.query(LAST_25_PROJECTS_QUERY)
+        getProjectsRequest = self.query(LAST_25_PROJECTS_QUERY)
 
-        getProjectsRequests.raise_for_status()
-        return getProjectsRequests.json().get("data").get("viewer").get("repositories").get("nodes")
+        getProjectsRequest.raise_for_status()
+        print("Get last 25 projects response: %s" %
+              getProjectsRequest.json())
+        return getProjectsRequest.json().get("data").get("viewer").get("repositories").get("nodes")
+
+    def getAllIssues(self, repoName, ownerName):
+        # TODO(donnell74): Store this in the database and do incremental gets
+        getLast100IssuesRequest = self.query(
+            LAST_100_ISSUES_QUERY % (ownerName, repoName))
+
+        getLast100IssuesRequest.raise_for_status()
+        print("Get last 100 issues response: %s" %
+              getLast100IssuesRequest.json())
+        return getLast100IssuesRequest.json().get("data").get("repository").get("issues").get("nodes")
 
     def query(self, queryString):
         """Queries Github with queryString and correct auth."""
         # TODO(gdonnell): If this throws an unauthorized error delete the token
         # from the database.
+        print('Running query: %s' % (queryString))
         return requests.post(
             GITHUB_GRAPHQL_ENDPOINT,
             json={

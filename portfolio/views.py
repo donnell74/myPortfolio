@@ -25,7 +25,10 @@ def saveGithubToken(request):
 
 def index(request):
     githubClient = GithubV4Client(request.user)
-    context = {'projects': []}
+    context = {
+        'projects': [],
+        'githubLogin': githubClient.githubToken.github_username,
+    }
     if githubClient.atLeastOneTokenFound():
         for eachProject in githubClient.getLast25Projects():
             allIssues = githubClient.getAllIssues(eachProject.get(

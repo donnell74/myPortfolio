@@ -1,5 +1,6 @@
 from django.shortcuts import render, redirect
 from .github.client import GithubV4Client, CLIENT_ID
+from .github.stats.issue_stats import IssueStats
 from .models import GithubToken
 import requests
 import json
@@ -24,14 +25,27 @@ def saveGithubToken(request):
 
 def index(request):
     githubClient = GithubV4Client(request.user)
-    context = {'projects': []}
+    context = {
+        'projects': [],
+        'githubLogin': githubClient.githubToken.github_username,
+    }
     if githubClient.atLeastOneTokenFound():
         for eachProject in githubClient.getLast25Projects():
+            allIssues = githubClient.getAllIssues(eachProject.get(
+                'name'), eachProject.get('owner').get('login'))
+            issueStats = IssueStats(
+                allIssues, githubClient.githubToken.github_username)
             context['projects'].append(
                 {
-                    'name': eachProject.get("name"),
-                    'githubLink': 'https://github.com/donnell74/myPortfolio',
-                    'timelineData': '##data about timeline here##',
+                    'repoGeneralData': {
+                        'name': eachProject.get('name'),
+                        'githubUrl': eachProject.get('url'),
+                        'description': eachProject.get('description'),
+                    },
+                    'timelineData': {
+                        'createdAt': eachProject.get('createdAt'),
+                        'updatedAt': eachProject.get('pushedAt'),
+                    },
                     'icStatsData': {
                         'summary': '##data about ic stats here##',
                         'codeStats': '##Stats about code changes##',
@@ -44,10 +58,13 @@ def index(request):
                         'docStats': '##Stats about doc changes##',
                         'testStats': '##Stats about test changes##',
                     },
-                    'bugStatsData': {
-                        'summary': '##data about bug stats here##',
-                        'bugsClosed': '120',
-                        'bugsOpen': '32',
+                    'issuesStatsData': {
+                        'issuesTotal': issueStats.issuesTotal,
+                        'issuesClosedForRepo': issueStats.issuesClosedForRepo,
+                        'issuesOpenForRepo': issueStats.issuesOpenForRepo,
+                        'issuesCreatedByUser': issueStats.issuesCreatedByUser,
+                        'issuesClosedByUser': issueStats.issuesClosedByUser,
+                        'issuesAssignedToUser': issueStats.issuesAssignedToUser,
                     }
                 },
             )

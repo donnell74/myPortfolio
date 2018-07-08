@@ -48,7 +48,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'portfolio.middleware.AuthRedirectMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
-    'django.middleware.clickjacking.XFrameOptionsMiddleware',    
+    'django.middleware.clickjacking.XFrameOptionsMiddleware',
 ]
 
 ROOT_URLCONF = 'myportfolio.urls'
@@ -56,7 +56,7 @@ ROOT_URLCONF = 'myportfolio.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, '../portfolio/templates'),],
+        'DIRS': [os.path.join(BASE_DIR, '../portfolio/templates'), ],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [

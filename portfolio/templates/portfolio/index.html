@@ -12,35 +12,60 @@
         <div class="bg-light">
             <h3>{{eachProject.repoGeneralData.name}}</h3>
             <p><a href="{{eachProject.repoGeneralData.githubUrl}}">Github link</a></p>
-            <p>{{eachProject.repoGeneralData.description}}
-            <div class="timeline">
-                <p>Timeline</p>
-                <p>Created: {{eachProject.timelineData.createdAt}}</p>
-                <p>Last Update: {{eachProject.timelineData.updatedAt}}</p>
+            <p>{{eachProject.repoGeneralData.description}}</p>
+            <div class="row">
+                <div class="timeline card col-md-3" style="width: 18rem;">
+                    <div class="card-body">
+                        <h4 class="card-title">Timeline</h4>
+                        <span class="card-text">
+                            <p>Created: {{eachProject.timelineData.createdAt}}</p>
+                            <p>Last Update: {{eachProject.timelineData.updatedAt}}</p>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="ICStats card col-md-3" style="width: 18rem;">
+                    <div class="card-body">
+                        <h4 class="card-title">Individual Contributor Stats For <a href="https://github.com/{{githubLogin}}">{{githubLogin}}</a></h4>
+                        <span class="card-text">
+                            <p>Code Stats Additions: {{eachProject.icStatsData.userStats.additions}}</p>
+                            <p>Code Stats Deletions: {{eachProject.icStatsData.userStats.deletions}}</p>
+                            <p>Doc Stats Additions: {{eachProject.icStatsData.docStats.additions}}</p>
+                            <p>Doc Stats Deletions: {{eachProject.icStatsData.docStats.deletions}}</p>
+                            <p>Test Stats Additions: {{eachProject.icStatsData.testStats.additions}}</p>
+                            <p>Test Stats Deletions: {{eachProject.icStatsData.testStats.deletions}}</p>
+                            <p>Repo Stats Additions: {{eachProject.icStatsData.repoStats.additions}}</p>
+                            <p>Repo Stats Deletions: {{eachProject.icStatsData.repoStats.deletions}}</p>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="ReviewerStats card col-md-3" style="width: 18rem;">
+                    <div class="card-body">
+                        <h4 class="card-title">Reviewer Stats</h4>
+                        <span class="card-text">
+                            <p>Summary: {{eachProject.reviewerStatsData.summary}}</p>
+                            <p>Code Stats: {{eachProject.reviewerStatsData.codeStats}}</p>
+                            <p>Doc Stats: {{eachProject.reviewerStatsData.docStats}}</p>
+                            <p>Test Stats: {{eachProject.reviewerStatsData.testStats}}</p>
+                        </span>
+                    </div>
+                </div>
+
+                <div class="IssueStats card col-md-3" style="width: 18rem;">
+                    <div class="card-body">
+                        <h4 class="card-title">Issues Stats</h4>
+                        <span class="card-text">
+                            <p>Issues Total: {{eachProject.issuesStatsData.issuesTotal}}</p>
+                            <p>Issues Open For Repo: {{eachProject.issuesStatsData.issuesOpenForRepo}}</p>
+                            <p>Issues Closed For Repo: {{eachProject.issuesStatsData.issuesClosedForRepo}}</p>
+                            <p>Issues Created By User: {{eachProject.issuesStatsData.issuesCreatedByUser}}</p>
+                            <p>Issues Assigned To User: {{eachProject.issuesStatsData.issuesAssignedToUser}}</p>
+                            <p>Issues Closed By User: {{eachProject.issuesStatsData.issuesClosedByUser}}</p>
+                        </span>
+                    </div>
+                </div>
             </div>
-            <div class="ICStats">
-                <p>Individual Contributor Stats For <a href="https://github.com/{{githubLogin}}">{{githubLogin}}</a></p>
-                <p>Summary: {{eachProject.icStatsData.summary}}</p>
-                <p>Code Stats: {{eachProject.icStatsData.codeStats}}</p>
-                <p>Doc Stats: {{eachProject.icStatsData.docStats}}</p>
-                <p>Test Stats: {{eachProject.icStatsData.testStats}}</p>
-            </div>
-            <div class="ReviewerStats">
-                <p>Reviewer Stats</p>
-                <p>Summary: {{eachProject.reviewerStatsData.summary}}</p>
-                <p>Code Stats: {{eachProject.reviewerStatsData.codeStats}}</p>
-                <p>Doc Stats: {{eachProject.reviewerStatsData.docStats}}</p>
-                <p>Test Stats: {{eachProject.reviewerStatsData.testStats}}</p>
-            </div>
-            <div class="IssueStats">
-                <p>Issues Stats</p>
-                <p>Issues Total: {{eachProject.issuesStatsData.issuesTotal}}</p>
-                <p>Issues Open For Repo: {{eachProject.issuesStatsData.issuesOpenForRepo}}</p>
-                <p>Issues Closed For Repo: {{eachProject.issuesStatsData.issuesClosedForRepo}}</p>
-                <p>Issues Created By User: {{eachProject.issuesStatsData.issuesCreatedByUser}}</p>
-                <p>Issues Assigned To User: {{eachProject.issuesStatsData.issuesAssignedToUser}}</p>
-                <p>Issues Closed By User: {{eachProject.issuesStatsData.issuesClosedByUser}}</p>
-            </div>            
         </div>
     {% endfor %}
 {% endblock %}

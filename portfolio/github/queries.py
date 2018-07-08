@@ -48,3 +48,37 @@ query {
   }
 }
 """
+
+LAST_100_COMMITS_QUERY = """
+query { 
+  repository(owner:"%s", name:"%s") {
+    defaultBranchRef {
+      target {
+        ... on Commit {
+          history(first: 100) {
+            pageInfo {
+              hasNextPage
+              endCursor
+            }
+            edges {
+              node {
+                oid
+                messageHeadline
+                additions
+                deletions
+                committer {
+                  user {
+                    login
+                  }
+                }
+                pushedDate
+                
+              }
+            }
+          }
+        }
+      }
+    }
+  }
+}
+"""

@@ -1,6 +1,7 @@
 from django.shortcuts import render, redirect
 from .github.client import GithubV4Client, CLIENT_ID
 from .github.stats.issue_stats import IssueStats
+from .github.stats.ic_stats import ICStats
 from .models import GithubToken
 import requests
 import json
@@ -35,6 +36,10 @@ def index(request):
                 'name'), eachProject.get('owner').get('login'))
             issueStats = IssueStats(
                 allIssues, githubClient.githubToken.github_username)
+            allCommits = githubClient.getAllCommits(eachProject.get(
+                'name'), eachProject.get('owner').get('login'))
+            icStats = ICStats(
+                allCommits, githubClient.githubToken.github_username)
             context['projects'].append(
                 {
                     'repoGeneralData': {
@@ -46,26 +51,14 @@ def index(request):
                         'createdAt': eachProject.get('createdAt'),
                         'updatedAt': eachProject.get('pushedAt'),
                     },
-                    'icStatsData': {
-                        'summary': '##data about ic stats here##',
-                        'codeStats': '##Stats about code changes##',
-                        'docStats': '##Stats about doc changes##',
-                        'testStats': '##Stats about test changes##',
-                    },
+                    'icStatsData': icStats.process(),
                     'reviewerStatsData': {
                         'summary': '##data about reviewer stats here##',
                         'codeStats': '##Stats about code changes##',
                         'docStats': '##Stats about doc changes##',
                         'testStats': '##Stats about test changes##',
                     },
-                    'issuesStatsData': {
-                        'issuesTotal': issueStats.issuesTotal,
-                        'issuesClosedForRepo': issueStats.issuesClosedForRepo,
-                        'issuesOpenForRepo': issueStats.issuesOpenForRepo,
-                        'issuesCreatedByUser': issueStats.issuesCreatedByUser,
-                        'issuesClosedByUser': issueStats.issuesClosedByUser,
-                        'issuesAssignedToUser': issueStats.issuesAssignedToUser,
-                    }
+                    'issuesStatsData': issueStats.process(),
                 },
             )
 

@@ -89,6 +89,16 @@ class GithubV4Client(object):
               getLast100IssuesRequest.json())
         return getLast100IssuesRequest.json().get("data").get("repository").get("issues").get("nodes")
 
+    def getAllCommits(self, repoName, ownerName):
+        # TODO(donnell74): Store this in the database and do incremental gets
+        getLast100CommitsRequest = self.query(
+            LAST_100_COMMITS_QUERY % (ownerName, repoName))
+
+        getLast100CommitsRequest.raise_for_status()
+        print("Get last 100 commits response: %s" %
+              getLast100CommitsRequest.json())
+        return [eachEdge.get("node") for eachEdge in getLast100CommitsRequest.json().get("data").get("repository").get("ref").get("target").get("history").get("edges")]
+
     def query(self, queryString):
         """Queries Github with queryString and correct auth."""
         # TODO(gdonnell): If this throws an unauthorized error delete the token
